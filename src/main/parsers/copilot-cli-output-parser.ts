@@ -128,11 +128,9 @@ export class CopilotCliOutputParser implements AgentOutputParser {
 
 	// Cached context window
 	private contextWindow: number;
-	private model: string;
 	private currentSessionId: string | null = null;
 
 	constructor(model: string = 'claude-sonnet-4.5') {
-		this.model = model;
 		this.contextWindow = getModelContextWindow(model);
 	}
 
