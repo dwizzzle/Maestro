@@ -73,7 +73,7 @@ interface EditAgentModalProps {
 }
 
 // Supported agents that are fully implemented
-const SUPPORTED_AGENTS = ['claude-code', 'opencode', 'codex'];
+const SUPPORTED_AGENTS = ['claude-code', 'opencode', 'codex', 'copilot-cli'];
 
 export function NewInstanceModal({
 	isOpen,
@@ -241,15 +241,15 @@ export function NewInstanceModal({
 			if (sshRemoteId) {
 				const connectionErrors = detectedAgents
 					.filter((a: AgentConfig) => !a.hidden)
-					 
+
 					.filter((a: any) => a.error)
-					 
+
 					.map((a: any) => a.error);
 				const allHaveErrors =
 					connectionErrors.length > 0 &&
 					detectedAgents
 						.filter((a: AgentConfig) => !a.hidden)
-						 
+
 						.every((a: any) => a.error || !a.available);
 
 				if (allHaveErrors && connectionErrors.length > 0) {
@@ -633,7 +633,6 @@ export function NewInstanceModal({
 
 		// Re-run agent detection with the new SSH remote ID
 		loadAgents(undefined, currentSshRemoteId ?? undefined);
-		 
 	}, [isOpen, currentSshRemoteId]);
 
 	if (!isOpen) return null;
