@@ -114,6 +114,7 @@ export function getProviderDisplayName(toolType: ToolType): string {
 		aider: 'Aider',
 		opencode: 'OpenCode',
 		codex: 'Codex',
+		'copilot-cli': 'GitHub Copilot CLI',
 		terminal: 'Terminal',
 	};
 	return displayNames[toolType] || toolType;

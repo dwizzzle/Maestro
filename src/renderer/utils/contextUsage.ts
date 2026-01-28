@@ -16,6 +16,7 @@ export const DEFAULT_CONTEXT_WINDOWS: Record<ToolType, number> = {
 	'claude-code': 200000, // Claude 3.5 Sonnet/Claude 4 default context
 	claude: 200000, // Legacy Claude
 	codex: 200000, // OpenAI o3/o4-mini context window
+	'copilot-cli': 200000, // Copilot CLI (varies by model, Claude Sonnet default)
 	opencode: 128000, // OpenCode (depends on model, 128k is conservative default)
 	aider: 128000, // Aider (varies by model, 128k is conservative default)
 	terminal: 0, // Terminal has no context window

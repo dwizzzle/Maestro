@@ -179,6 +179,65 @@ export const AGENT_DEFINITIONS: Omit<AgentConfig, 'available' | 'path' | 'capabi
 		command: 'aider',
 		args: [], // Base args (placeholder - to be configured when implemented)
 	},
+	{
+		id: 'copilot-cli',
+		name: 'GitHub Copilot CLI',
+		binaryName: 'copilot',
+		command: 'copilot',
+		// Base args for batch mode: --acp enables Agent Client Protocol (JSON-RPC streaming)
+		// YOLO mode (--yolo) is always enabled - Maestro requires it for unattended operation
+		args: [],
+		// Copilot CLI argument builders
+		// Batch mode: copilot --acp --yolo [--model <model>] [--resume <id>] -p "prompt"
+		batchModePrefix: [], // No subcommand needed for batch mode
+		batchModeArgs: ['--acp', '--yolo'], // ACP for JSON output, YOLO for auto-approval
+		jsonOutputArgs: ['--acp'], // Agent Client Protocol for JSON streaming
+		resumeArgs: (sessionId: string) => ['--resume', sessionId], // Resume with session ID
+		yoloModeArgs: ['--yolo'], // Full access mode (--allow-all equivalent)
+		modelArgs: (modelId: string) => ['--model', modelId], // Model selection
+		promptArgs: (prompt: string) => ['-p', prompt], // Non-interactive prompt
+		noPromptSeparator: true, // Copilot CLI uses -p flag, not -- separator
+		// Agent-specific configuration options shown in UI
+		configOptions: [
+			{
+				key: 'model',
+				type: 'select',
+				label: 'Model',
+				description: 'AI model to use for Copilot CLI.',
+				default: 'claude-sonnet-4.5',
+				options: [
+					'claude-sonnet-4.5',
+					'claude-haiku-4.5',
+					'claude-opus-4.5',
+					'claude-sonnet-4',
+					'gemini-3-pro-preview',
+					'gpt-5.2-codex',
+					'gpt-5.2',
+					'gpt-5.1-codex-max',
+					'gpt-5.1-codex',
+					'gpt-5.1',
+					'gpt-5',
+					'gpt-5.1-codex-mini',
+					'gpt-5-mini',
+					'gpt-4.1',
+				],
+				argBuilder: (value: string) => {
+					if (value && value.trim()) {
+						return ['--model', value.trim()];
+					}
+					return [];
+				},
+			},
+			{
+				key: 'contextWindow',
+				type: 'number',
+				label: 'Context Window Size',
+				description:
+					'Maximum context window size in tokens. Varies by model (e.g., 200000 for Claude Sonnet, 400000 for GPT-5.2).',
+				default: 200000, // Default for Claude Sonnet 4.5
+			},
+		],
+	},
 ];
 
 export class AgentDetector {

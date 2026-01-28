@@ -840,3 +840,84 @@ codex exec --json resume <thread_id> "continue"
 2. Capabilities in `agent-capabilities.ts` (likely local model, no cost tracking)
 3. Output parser for Qwen JSON format
 4. Error patterns (likely minimal for local models)
+
+---
+
+### GitHub Copilot CLI ✅ Fully Implemented
+
+| Aspect | Value |
+|--------|-------|
+| Binary | `copilot` |
+| JSON Output | `--acp` (Agent Client Protocol) |
+| Batch Mode | `-p, --prompt <text>` |
+| Resume | `--resume [sessionId]` or `--continue` |
+| Read-only | Not available (no sandbox mode) |
+| YOLO Mode | `--yolo` or `--allow-all` (enabled by default in Maestro) |
+| Session ID Field | Provided in ACP messages |
+| Session Storage | `~/.copilot/` |
+| Model Selection | `--model <model>` |
+
+**Implementation Status:**
+- ✅ Output Parser: `src/main/parsers/copilot-cli-output-parser.ts`
+- ⏳ Session Storage: Not yet implemented
+- ✅ Error Patterns: `src/main/parsers/error-patterns.ts`
+- ✅ All core capabilities enabled
+
+**JSON Format (ACP - Agent Client Protocol):**
+- JSON-RPC based streaming protocol
+- Session initialization with session_id
+- Streaming text deltas via `delta` objects
+- Tool usage events with name and status
+- Completion events with final output
+
+**Available Models:**
+- Claude: claude-sonnet-4.5, claude-haiku-4.5, claude-opus-4.5, claude-sonnet-4
+- GPT: gpt-5.2-codex, gpt-5.2, gpt-5.1-codex-max, gpt-5.1-codex, gpt-5.1, gpt-5, gpt-5.1-codex-mini, gpt-5-mini, gpt-4.1
+- Gemini: gemini-3-pro-preview
+
+**Command Line Pattern:**
+```bash
+# Interactive mode
+copilot
+
+# Batch mode with YOLO (Maestro default)
+copilot --acp --yolo -p "prompt"
+
+# With model selection
+copilot --acp --yolo --model gpt-5.2 -p "prompt"
+
+# Resume session
+copilot --acp --yolo --resume <sessionId> -p "continue"
+```
+
+**Slash Commands:**
+- `/help` - Display help information
+- `/model` - Change the AI model
+- `/login` - Authenticate with GitHub
+- `/logout` - Sign out
+- `/feedback` - Submit feedback
+- `/agent` - List available custom agents
+- `/delegate` - Dispatch work to a coding agent
+- `/experimental` - Toggle experimental features
+
+**Authentication:**
+- Interactive: `/login` command
+- PAT: Set `GH_TOKEN` or `GITHUB_TOKEN` environment variable
+- Requires active Copilot subscription (Pro, Pro+, Business, or Enterprise)
+
+**Installation:**
+```bash
+# npm
+npm install -g @github/copilot
+
+# WinGet (Windows)
+winget install GitHub.Copilot
+
+# Homebrew (macOS/Linux)
+brew install copilot-cli
+```
+
+**Documentation Sources:**
+- [GitHub Copilot CLI Repository](https://github.com/github/copilot-cli)
+- [GitHub Copilot CLI Docs](https://docs.github.com/copilot/concepts/agents/about-copilot-cli)
+- [Agent Client Protocol](https://github.com/agentclientprotocol/agent-client-protocol)

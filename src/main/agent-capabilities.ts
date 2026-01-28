@@ -303,6 +303,35 @@ export const AGENT_CAPABILITIES: Record<string, AgentCapabilities> = {
 		supportsContextMerge: true, // Can receive merged context via prompts
 		supportsContextExport: true, // Session storage supports context export
 	},
+
+	/**
+	 * GitHub Copilot CLI - AI-powered coding assistant from GitHub
+	 * https://github.com/github/copilot-cli
+	 *
+	 * Verified capabilities based on CLI testing (v0.0.369+) and documentation review.
+	 * Uses Agent Client Protocol (ACP) for JSON streaming output.
+	 */
+	'copilot-cli': {
+		supportsResume: true, // --resume [sessionId] or --continue for most recent
+		supportsReadOnlyMode: false, // No sandbox/read-only mode available
+		supportsJsonOutput: true, // --acp flag for Agent Client Protocol (JSON-RPC streaming)
+		supportsSessionId: true, // Session ID provided in ACP messages
+		supportsImageInput: false, // No image input flag documented
+		supportsImageInputOnResume: false, // No image support
+		supportsSlashCommands: true, // /help, /model, /login, /feedback, etc.
+		supportsSessionStorage: true, // ~/.copilot/ directory
+		supportsCostTracking: false, // Uses Copilot subscription, no per-request cost
+		supportsUsageStats: false, // Token usage not exposed in ACP output
+		supportsBatchMode: true, // -p, --prompt flag for non-interactive mode
+		requiresPromptToStart: true, // Requires -p flag with prompt for batch mode
+		supportsStreaming: true, // ACP streams JSON-RPC messages
+		supportsResultMessages: true, // ACP has completion events
+		supportsModelSelection: true, // --model flag with multiple model choices
+		supportsStreamJsonInput: false, // No stdin JSON input
+		supportsThinkingDisplay: true, // Emits streaming text via ACP
+		supportsContextMerge: true, // Can receive merged context via prompts
+		supportsContextExport: false, // Session storage format not yet investigated
+	},
 };
 
 /**

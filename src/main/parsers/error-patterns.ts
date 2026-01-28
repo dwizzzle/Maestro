@@ -29,6 +29,7 @@ const VALID_TOOL_TYPES = new Set<string>([
 	'aider',
 	'opencode',
 	'codex',
+	'copilot-cli',
 	'terminal',
 ]);
 
@@ -717,6 +718,153 @@ export const SSH_ERROR_PATTERNS: AgentErrorPatterns = {
 };
 
 // ============================================================================
+// GitHub Copilot CLI Error Patterns
+// ============================================================================
+
+export const COPILOT_CLI_ERROR_PATTERNS: AgentErrorPatterns = {
+	auth_expired: [
+		{
+			pattern: /not authenticated/i,
+			message: 'Not authenticated. Please run "copilot /login" to authenticate.',
+			recoverable: true,
+		},
+		{
+			pattern: /authentication.*failed/i,
+			message: 'Authentication failed. Please run "copilot /login" to re-authenticate.',
+			recoverable: true,
+		},
+		{
+			pattern: /please.*login/i,
+			message: 'Login required. Please run "copilot /login" to authenticate.',
+			recoverable: true,
+		},
+		{
+			pattern: /invalid.*token/i,
+			message: 'Invalid authentication token. Please run "copilot /login" to re-authenticate.',
+			recoverable: true,
+		},
+		{
+			pattern: /unauthorized/i,
+			message: 'Unauthorized access. Please check your GitHub Copilot subscription.',
+			recoverable: true,
+		},
+		{
+			pattern: /\b401\b/,
+			message: 'Authentication failed (401). Please run "copilot /login" to re-authenticate.',
+			recoverable: true,
+		},
+		{
+			pattern: /copilot.*subscription/i,
+			message: 'Copilot subscription required. Please ensure you have an active subscription.',
+			recoverable: false,
+		},
+	],
+
+	token_exhaustion: [
+		{
+			pattern: /context.*exceeded/i,
+			message: 'Context limit exceeded. Start a new session.',
+			recoverable: true,
+		},
+		{
+			pattern: /maximum.*tokens/i,
+			message: 'Maximum token limit reached. Start a new session.',
+			recoverable: true,
+		},
+		{
+			pattern: /prompt.*too\s+long/i,
+			message: 'Prompt is too long. Try a shorter message or start a new session.',
+			recoverable: true,
+		},
+	],
+
+	rate_limited: [
+		{
+			pattern: /rate.*limit/i,
+			message: 'Rate limit exceeded. Please wait before trying again.',
+			recoverable: true,
+		},
+		{
+			pattern: /too many requests/i,
+			message: 'Too many requests. Please wait before sending more messages.',
+			recoverable: true,
+		},
+		{
+			pattern: /quota.*exceeded/i,
+			message: 'Your usage quota has been exceeded.',
+			recoverable: false,
+		},
+		{
+			pattern: /\b429\b/,
+			message: 'Rate limited. Please wait and try again.',
+			recoverable: true,
+		},
+	],
+
+	network_error: [
+		{
+			pattern: /connection\s*(failed|refused|error|reset|closed)/i,
+			message: 'Connection failed. Check your internet connection.',
+			recoverable: true,
+		},
+		{
+			pattern: /ECONNREFUSED|ECONNRESET|ETIMEDOUT|ENOTFOUND/i,
+			message: 'Network error. Check your internet connection.',
+			recoverable: true,
+		},
+		{
+			pattern: /request\s+timed?\s*out|timed?\s*out\s+waiting/i,
+			message: 'Request timed out. Please try again.',
+			recoverable: true,
+		},
+		{
+			pattern: /network\s+(error|failure|unavailable)/i,
+			message: 'Network error occurred. Please check your connection.',
+			recoverable: true,
+		},
+	],
+
+	permission_denied: [
+		{
+			pattern: /permission denied/i,
+			message: 'Permission denied. The agent cannot access the requested resource.',
+			recoverable: false,
+		},
+		{
+			pattern: /access denied/i,
+			message: 'Access denied to the requested resource.',
+			recoverable: false,
+		},
+		{
+			pattern: /\b403\b/,
+			message: 'Forbidden. You may need additional permissions.',
+			recoverable: false,
+		},
+	],
+
+	agent_crashed: [
+		{
+			pattern: /\b(fatal|unexpected|internal|unhandled)\s+error\b/i,
+			message: 'An unexpected error occurred in the agent.',
+			recoverable: true,
+		},
+	],
+
+	session_not_found: [
+		{
+			pattern: /session.*not found/i,
+			message: 'Session not found. Starting fresh conversation.',
+			recoverable: true,
+		},
+		{
+			pattern: /invalid.*session/i,
+			message: 'Invalid session. Starting fresh conversation.',
+			recoverable: true,
+		},
+	],
+};
+
+// ============================================================================
 // Pattern Registry
 // ============================================================================
 
@@ -724,6 +872,7 @@ const patternRegistry = new Map<ToolType, AgentErrorPatterns>([
 	['claude-code', CLAUDE_ERROR_PATTERNS],
 	['opencode', OPENCODE_ERROR_PATTERNS],
 	['codex', CODEX_ERROR_PATTERNS],
+	['copilot-cli', COPILOT_CLI_ERROR_PATTERNS],
 ]);
 
 /**

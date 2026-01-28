@@ -110,6 +110,25 @@ export const AGENT_ARTIFACTS: Record<ToolType, string[]> = {
 		'openai codex',
 		'OpenAI Codex',
 	],
+	'copilot-cli': [
+		// Slash commands
+		'/help',
+		'/model',
+		'/login',
+		'/logout',
+		'/feedback',
+		'/agent',
+		'/delegate',
+		'/experimental',
+		// Brand references
+		'Copilot',
+		'GitHub Copilot',
+		'copilot cli',
+		// Model references - Copilot uses various models
+		'Claude',
+		'GPT',
+		'Gemini',
+	],
 	claude: [
 		// This is the base Claude (not Claude Code)
 		'Claude',
@@ -151,6 +170,13 @@ export const AGENT_TARGET_NOTES: Record<ToolType, string> = {
     It can read files, edit code, and run terminal commands.
     It excels at complex reasoning and problem-solving.
   `,
+	'copilot-cli': `
+    GitHub Copilot CLI is an AI coding assistant by GitHub.
+    It supports multiple AI models including Claude, GPT, and Gemini.
+    It can read and edit files, run terminal commands, and interact with GitHub.
+    It uses slash commands like /help, /model, /agent, and /delegate.
+    It can delegate tasks to background coding agents.
+  `,
 	claude: `
     Claude is a general-purpose AI assistant by Anthropic.
     It does not have direct file system or terminal access.
@@ -171,6 +197,7 @@ export function getAgentDisplayName(agentType: ToolType): string {
 		aider: 'Aider',
 		opencode: 'OpenCode',
 		codex: 'OpenAI Codex',
+		'copilot-cli': 'GitHub Copilot CLI',
 		claude: 'Claude',
 		terminal: 'Terminal',
 	};

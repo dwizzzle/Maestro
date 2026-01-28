@@ -39,6 +39,7 @@ const VALID_TOOL_TYPES: ToolType[] = [
 	'claude-code',
 	'opencode',
 	'codex',
+	'copilot-cli',
 	'terminal',
 	'claude',
 	'aider',
